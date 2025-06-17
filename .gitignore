@@ -1,0 +1,4 @@
+*.oz
+zig-out/
+.zig-cache
+test-proj/
