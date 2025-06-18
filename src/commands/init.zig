@@ -2,7 +2,6 @@ const std = @import("std");
 const utils = @import("../utils.zig");
 
 pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
-    const stdout = std.io.getStdOut().writer();
     var target_dir: []u8 = undefined;
 
     if (args.len == 2) {
@@ -24,5 +23,5 @@ pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
     var proc = std.process.Child.init(cmd, allocator);
     _ = try proc.spawnAndWait();
 
-    try stdout.print("✅ Project initialized in {s}\n", .{target_dir});
+    try utils.print("✅ Project initialized in {s}\n", .{target_dir});
 }

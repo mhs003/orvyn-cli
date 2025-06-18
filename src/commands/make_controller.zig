@@ -2,8 +2,6 @@ const std = @import("std");
 const utils = @import("../utils.zig");
 
 pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
-    const stdout = std.io.getStdOut().writer();
-
     var name: []u8 = undefined;
     if (args.len == 2) {
         const input = try utils.prompt(allocator, "Controller name");
@@ -40,5 +38,5 @@ pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
 
     try utils.writeFile(path, content);
 
-    try stdout.print("✅ Controller created: {s}\n", .{path});
+    try utils.print("✅ Controller created: {s}\n", .{path});
 }

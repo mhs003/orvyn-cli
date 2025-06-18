@@ -1,7 +1,7 @@
 const std = @import("std");
+const utils = @import("utils.zig");
 
 pub fn main() !void {
-    const stdout = std.io.getStdOut().writer();
     const allocator = std.heap.page_allocator;
 
     const raw_args = try std.process.argsAlloc(allocator);
@@ -12,7 +12,7 @@ pub fn main() !void {
     }
 
     if (args.len < 2) {
-        try stdout.print("Usage: orvyn <command> [options]\n", .{});
+        try utils.print("Usage: orvyn <command> [options]\n", .{});
         return;
     }
 
@@ -26,7 +26,7 @@ pub fn main() !void {
             file.close();
         } else |err| {
             if (err == error.FileNotFound) {
-                try stdout.print("❌ Not an Orvyn project: `orvyn.json` not found in current directory.\n", .{});
+                try utils.print("❌ Not an Orvyn project: `orvyn.json` not found in current directory.\n", .{});
                 return;
             } else {
                 return err;
@@ -34,7 +34,7 @@ pub fn main() !void {
         }
     } else {
         if (orvynJsonFile) |file| {
-            try stdout.print("❌ An Orvyn project is already initialized in this directory.\n", .{});
+            try utils.print("❌ An Orvyn project is already initialized in this directory.\n", .{});
             file.close();
             return;
         } else |_| {}
@@ -55,6 +55,6 @@ pub fn main() !void {
     } else if (std.mem.eql(u8, command, "migrate:rollback")) {
         try @import("commands/rollback.zig").run(allocator, args);
     } else {
-        try stdout.print("Unknown command: {s}\n", .{command});
+        try utils.print("Unknown command: {s}\n", .{command});
     }
 }

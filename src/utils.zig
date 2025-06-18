@@ -13,3 +13,23 @@ pub fn writeFile(path: []const u8, content: []const u8) !void {
     defer file.close();
     try file.writeAll(content);
 }
+
+pub fn print(comptime fmt: []const u8, args: anytype, debug: bool) !void {
+    if (debug) {
+        print_debug(fmt, args);
+        return;
+    }
+    try std.io.getStdOut().writer().print(fmt, args);
+}
+
+pub fn print_err(comptime fmt: []const u8, args: anytype) !void {
+    try std.io.getStdErr().writer().print(fmt, args);
+}
+
+pub fn print_panic(comptime fmt: []const u8, args: anytype) void {
+    std.io.getStdErr().writer().print(fmt, args) catch @panic("print_panic failed");
+}
+
+pub fn print_debug(comptime fmt: []const u8, args: anytype) void {
+    std.debug().print(fmt, args);
+}
