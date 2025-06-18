@@ -14,11 +14,7 @@ pub fn writeFile(path: []const u8, content: []const u8) !void {
     try file.writeAll(content);
 }
 
-pub fn print(comptime fmt: []const u8, args: anytype, debug: bool) !void {
-    if (debug) {
-        print_debug(fmt, args);
-        return;
-    }
+pub fn print(comptime fmt: []const u8, args: anytype) !void {
     try std.io.getStdOut().writer().print(fmt, args);
 }
 
@@ -32,4 +28,8 @@ pub fn print_panic(comptime fmt: []const u8, args: anytype) void {
 
 pub fn print_debug(comptime fmt: []const u8, args: anytype) void {
     std.debug().print(fmt, args);
+}
+
+pub fn sprintf(allocator: std.mem.Allocator, comptime fmt: []const u8, args: anytype) ![]u8 {
+    return std.fmt.allocPrint(allocator, fmt, args);
 }

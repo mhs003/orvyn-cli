@@ -17,11 +17,11 @@ pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
     const path = try std.fs.path.join(allocator, &[_][]const u8{ "App", "Middleware", filename });
 
     if (std.fs.cwd().statFile(path)) |_| {
-        std.debug.print("Middleware already exists: {s}\n", .{path});
+        try utils.print_err("Middleware already exists: {s}\n", .{path});
         return;
     } else |_| {}
 
-    const content = try std.fmt.allocPrint(allocator,
+    const content = try utils.sprintf(allocator,
         \\<?php
         \\
         \\namespace App\Middleware;
@@ -36,6 +36,7 @@ pub fn run(allocator: std.mem.Allocator, args: [][]u8) !void {
         \\    }}
         \\}}
     , .{name});
+    defer allocator.free(content);
 
     try utils.writeFile(path, content);
 
